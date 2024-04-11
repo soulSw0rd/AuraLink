@@ -4,42 +4,148 @@ import pandas as pd
 app = Flask(__name__)
 
 # Load the dataset
-df = pd.read_csv('Speed_Dating_Data.csv')
+df = pd.read_csv("Speed_Dating_Data.csv", encoding="ISO-8859-1")
 
-@app.route('/')
-def home():
-    return "Welcome to the Speed Dating API!"
+colonne_profil = ['iid', 'gender', 'age', 'field_cd', 'race', 'goal', 'from', 'career_c']
 
-@app.route('/participants', methods=['GET'])
-def get_participants():
-    # Using Pandas to filter columns for the response
-    participants = df[['iid', 'gender', 'age', 'field', 'race']].drop_duplicates()
-    return jsonify(participants.to_dict(orient='records'))
+df_profil = df[colonne_profil]
+df_profil["gender"] = df_profil["gender"]\
+    .replace(0, "F")\
+    .replace(1,"H").fillna("Non Renseigner").astype(str)
+df_profil["from"] = df_profil["from"].fillna("Non Renseigner").astype(str)
+df_profil["race"] = df_profil["race"]\
+    .replace(1, "Black")\
+    .replace(2,"European")\
+    .replace(3,"Latino")\
+    .replace(4,"Asian")\
+    .replace(5,"Native American")\
+    .replace(6,"Other").fillna("Non Renseigner").astype(str)
+df_profil["goal"] = df_profil["goal"]\
+    .replace(1, "Fun night out")\
+    .replace(2,"Meet new people")\
+    .replace(3,"Get a date")\
+    .replace(4,"Serious relationship")\
+    .replace(5,"Say i did it")\
+    .replace(6,"Other").fillna("Non Renseigner").astype(str)
+df_profil["field_cd"] = df_profil["field_cd"]\
+    .replace(1,"Law")\
+    .replace(2,"Math")\
+    .replace(3,"Psychologist")\
+    .replace(4,"Pharmaceuticals")\
+    .replace(5,"Engineering")\
+    .replace(6,"Journalism")\
+    .replace(7,"History/Religion/Philosophy")\
+    .replace(8,"Business")\
+    .replace(9,"Education")\
+    .replace(10,"Biological")\
+    .replace(11,"Social Work")\
+    .replace(12,"Undergrad")\
+    .replace(13,"Political Science")\
+    .replace(14,"Film")\
+    .replace(15,"Arts")\
+    .replace(16,"Languages")\
+    .replace(17,"Architecture")\
+    .replace(18,"Other").fillna("Non Renseigner").astype(str)
+df_profil["career_c"] = df_profil["career_c"]\
+    .replace(1,"Lawyer")\
+    .replace(2,"Academic/Research ")\
+    .replace(3,"Psychologist")\
+    .replace(4,"Doctor/Medicine")\
+    .replace(5,"Engineer")\
+    .replace(6,"Creative Arts/Entertainment")\
+    .replace(7,"Business")\
+    .replace(8,"Real Estate")\
+    .replace(9,"Humanitarian Affairs")\
+    .replace(10,"Undecided")\
+    .replace(11,"Social Work")\
+    .replace(12,"Speech Pathology")\
+    .replace(13,"Politics")\
+    .replace(14,"Pro sports/Athletics")\
+    .replace(15,"Other")\
+    .replace(16,"Journalism")\
+    .replace(17,"Architecture").fillna("Non Renseigner").astype(str)
+df_profil = df_profil.drop_duplicates()
 
-@app.route('/participant/<int:iid>', methods=['GET'])
-def get_participant(iid):
-    # Filtering the dataset for a specific participant
-    participant = df[df['iid'] == iid][['iid', 'gender', 'age', 'field', 'race']].drop_duplicates()
-    if not participant.empty:
-        return jsonify(participant.to_dict(orient='records')[0])
-    else:
-        return jsonify({"error": "Participant not found"}), 404
 
-@app.route('/matches/<int:iid>', methods=['GET'])
-def get_matches(iid):
-    # Querying matches for a specific participant
-    matches = df[(df['iid'] == iid) & (df['match'] == 1)][['iid', 'pid', 'match']]
-    if not matches.empty:
-        return jsonify(matches.to_dict(orient='records'))
-    else:
-        return jsonify({"error": "No matches found for this participant"}), 404
+colonne_rencontre = ['iid', 'gender', 'age', 'field_cd', 'race', 'goal', 'from', 'career_c', 'match', 'pid']
 
-@app.route('/statistics/gender', methods=['GET'])
-def get_gender_statistics():
-    # Getting gender distribution
-    gender_count = df['gender'].value_counts().rename({0: 'Female', 1: 'Male'})
-    return jsonify(gender_count.to_dict())
+df_rencontre = df[colonne_rencontre]
+df_rencontre["gender"] = df_rencontre["gender"]\
+    .replace(0, "F")\
+    .replace(1,"H").fillna("Non Renseigner").astype(str)
+df_profil["from"] = df_profil["from"].fillna("Non Renseigner").astype(str)
+df_rencontre["race"] = df_rencontre["race"]\
+    .replace(1, "Black")\
+    .replace(2,"European")\
+    .replace(3,"Latino")\
+    .replace(4,"Asian")\
+    .replace(5,"Native American")\
+    .replace(6,"Other").fillna("Non Renseigner").astype(str)
+df_rencontre["goal"] = df_rencontre["goal"]\
+    .replace(1, "Fun night out")\
+    .replace(2,"Meet new people")\
+    .replace(3,"Get a date")\
+    .replace(4,"Serious relationship")\
+    .replace(5,"Say i did it")\
+    .replace(6,"Other").fillna("Non Renseigner").astype(str)
+df_rencontre["field_cd"] = df_rencontre["field_cd"]\
+    .replace(1,"Law")\
+    .replace(2,"Math")\
+    .replace(3,"Psychologist")\
+    .replace(4,"Pharmaceuticals")\
+    .replace(5,"Engineering")\
+    .replace(6,"Journalism")\
+    .replace(7,"History/Religion/Philosophy")\
+    .replace(8,"Business")\
+    .replace(9,"Education")\
+    .replace(10,"Biological")\
+    .replace(11,"Social Work")\
+    .replace(12,"Undergrad")\
+    .replace(13,"Political Science")\
+    .replace(14,"Film")\
+    .replace(15,"Arts")\
+    .replace(16,"Languages")\
+    .replace(17,"Architecture")\
+    .replace(18,"Other").fillna("Non Renseigner").astype(str)
+df_rencontre["career_c"] = df_rencontre["career_c"]\
+    .replace(1,"Lawyer")\
+    .replace(2,"Academic/Research ")\
+    .replace(3,"Psychologist")\
+    .replace(4,"Doctor/Medicine")\
+    .replace(5,"Engineer")\
+    .replace(6,"Creative Arts/Entertainment")\
+    .replace(7,"Business")\
+    .replace(8,"Real Estate")\
+    .replace(9,"Humanitarian Affairs")\
+    .replace(10,"Undecided")\
+    .replace(11,"Social Work")\
+    .replace(12,"Speech Pathology")\
+    .replace(13,"Politics")\
+    .replace(14,"Pro sports/Athletics")\
+    .replace(15,"Other")\
+    .replace(16,"Journalism")\
+    .replace(17,"Architecture").fillna("Non Renseigner").astype(str)
 
-if __name__ == '__main__':
-    app.run(debug=True)
- 
+df_rencontre["pid"] = df_rencontre["pid"].fillna(0).astype(int)
+
+def getUserMatchProfilDataframe(iid):
+    matchesPid=df_rencontre.loc[df_rencontre["iid"]==iid]["pid"]
+    return df_profil[df_profil["iid"].isin(matchesPid)]
+
+def getColumnMatchPourcente(column, value):
+    columnRencontrePid = df_rencontre.loc[df_rencontre[column] == value]["pid"]
+    columnMatchesPid = df_rencontre.loc[(df_rencontre["match"] == 1) & (df_rencontre[column] == value)]["pid"]
+    
+    columnMatchesPid = columnMatchesPid
+    return (df_profil[df_profil["iid"].isin(columnMatchesPid)][column].value_counts())/(df_profil[df_profil["iid"].isin(columnRencontrePid)][column].value_counts())
+
+getColumnMatchPourcente("gender","H")
+
+getColumnMatchPourcente("from", profil1Df["from"].values[0])[profil2Df["from"]]*\
+getColumnMatchPourcente("career_c", profil1Df["career_c"].values[0])[profil2Df["career_c"]]*\
+getColumnMatchPourcente("race", profil1Df["race"].values[0])[profil2Df["race"]].values[0]*\
+getColumnMatchPourcente("gender", profil1Df["gender"].values[0])[profil2Df["gender"]].values[0]*\
+getColumnMatchPourcente("goal", profil1Df["goal"].values[0])[profil2Df["goal"]].values[0]*\
+getColumnMatchPourcente("field_cd", profil1Df["field_cd"].values[0])[profil2Df["field_cd"]].values[0]*\
+getColumnMatchPourcente("age", profil1Df["age"].values[0])[profil2Df["age"]].values[0]*100
+#if nan = 50% sur le champ concerner 
