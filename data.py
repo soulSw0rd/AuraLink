@@ -141,6 +141,13 @@ def getColumnMatchPourcente(column, value):
 
 getColumnMatchPourcente("gender","H")
 
+profil1 = 1 
+profil2 = 234
+profil1Df = df_profil.loc[(df_profil["iid"] == profil1)]
+profil2Df = df_profil.loc[(df_profil["iid"] == profil2)]
+
+df_profil.loc[(df_profil["iid"] == profil1) | (df_profil["iid"] == profil2)]
+
 getColumnMatchPourcente("from", profil1Df["from"].values[0])[profil2Df["from"]]*\
 getColumnMatchPourcente("career_c", profil1Df["career_c"].values[0])[profil2Df["career_c"]]*\
 getColumnMatchPourcente("race", profil1Df["race"].values[0])[profil2Df["race"]].values[0]*\
