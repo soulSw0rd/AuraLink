@@ -26,14 +26,22 @@ def get_participants():
         "career_c":args.get("career_c")[0]
     }
     df = pd.DataFrame(args, index=[0])
-    #print(df)
-    #profils = [data_treat.getRandomProfil()[0] for _ in range(10)]
-    #dfs = pd.concat(profils, ignore_index=True)
-#
-    #pprint(dfs)
-    #def calculate_pourcent(row):   
-    #    return data_treat.getMatchPourcente(df, row)
-    #dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
+
+    dfs = None
+
+    for _ in range(10):
+        p = data_treat.getRandomProfil()
+        if dfs is None:
+            dfs = p
+        else:
+            dfs = pd.concat([dfs, p], ignore_index=True)
+
+    pprint(dfs)
+    def calculate_pourcent(row):   
+        return data_treat.getMatchPourcente(df, row)
+    dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
+
+    return dfs.to_json()
 
 @app.route('/profiles/best', methods=['GET'])
 def get_participant(iid):
