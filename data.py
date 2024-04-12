@@ -66,7 +66,6 @@ df_profil["career_c"] = df_profil["career_c"]\
     .replace(17,"Architecture").fillna("Non Renseigner").astype(str)
 df_profil = df_profil.drop_duplicates()
 
-
 colonne_rencontre = ['iid', 'gender', 'age', 'field_cd', 'race', 'goal', 'from', 'career_c', 'match', 'pid']
 
 df_rencontre = df[colonne_rencontre]
@@ -131,18 +130,14 @@ df_rencontre["pid"] = df_rencontre["pid"].fillna(0).astype(int)
 def getUserMatchProfilDataframe(iid):
     matchesPid=df_rencontre.loc[df_rencontre["iid"]==iid]["pid"]
     return df_profil[df_profil["iid"].isin(matchesPid)]
-
 def getColumnMatchPourcente(column, value):
     columnRencontrePid = df_rencontre.loc[df_rencontre[column] == value]["pid"]
     columnMatchesPid = df_rencontre.loc[(df_rencontre["match"] == 1) & (df_rencontre[column] == value)]["pid"]
     
     columnMatchesPid = columnMatchesPid
     return (df_profil[df_profil["iid"].isin(columnMatchesPid)][column].value_counts())/(df_profil[df_profil["iid"].isin(columnRencontrePid)][column].value_counts())
-
-getColumnMatchPourcente("gender","H")
-
-profil1 = 1 
-profil2 = 234
+profil1 = 1
+profil2 = 400
 profil1Df = df_profil.loc[(df_profil["iid"] == profil1)]
 profil2Df = df_profil.loc[(df_profil["iid"] == profil2)]
 
