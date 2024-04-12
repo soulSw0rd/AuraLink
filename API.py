@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import pandas as pd
 import data
+from pprint import pprint
 
 
 app = Flask(__name__)
@@ -15,13 +16,24 @@ def home():
 def get_participants():
     args=request.args.to_dict(flat=False)
 
-    print(args)
-
-    df = pd.DataFrame(args)
-    dfs = pd.DataFrame([data_treat.getRandomProfil() for _ in range(10)])
-    def calculate_pourcent(row):   
-        return data_treat.getMatchPourcente(df, row)
-    dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
+    args = {
+        "gender":args.get("gender")[0],
+        "age":int(args.get("age")[0]),
+        "field_cd":args.get("field_cd")[0],
+        "race":args.get("race")[0],
+        "goal":args.get("goal")[0],
+        "from":args.get("from")[0],
+        "career_c":args.get("career_c")[0]
+    }
+    df = pd.DataFrame(args, index=[0])
+    #print(df)
+    #profils = [data_treat.getRandomProfil()[0] for _ in range(10)]
+    #dfs = pd.concat(profils, ignore_index=True)
+#
+    #pprint(dfs)
+    #def calculate_pourcent(row):   
+    #    return data_treat.getMatchPourcente(df, row)
+    #dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
 
 @app.route('/profiles/best', methods=['GET'])
 def get_participant(iid):
