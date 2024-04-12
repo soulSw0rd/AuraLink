@@ -12,6 +12,7 @@ df_profil = df[colonne_profil]
 df_profil["gender"] = df_profil["gender"]\
     .replace(0, "F")\
     .replace(1,"H").fillna("Non Renseigner").astype(str)
+df_profil["age"] = df_profil["age"].apply(lambda x: 1 if x < 20 else (2 if x < 25 else (3 if x < 35 else (4 if x < 45 else 5))))
 df_profil["from"] = df_profil["from"].fillna("Non Renseigner").astype(str)
 df_profil["race"] = df_profil["race"]\
     .replace(1, "Black")\
@@ -72,7 +73,8 @@ df_rencontre = df[colonne_rencontre]
 df_rencontre["gender"] = df_rencontre["gender"]\
     .replace(0, "F")\
     .replace(1,"H").fillna("Non Renseigner").astype(str)
-df_profil["from"] = df_profil["from"].fillna("Non Renseigner").astype(str)
+df_rencontre["age"] = df_rencontre["age"].apply(lambda x: 1 if x < 20 else (2 if x < 25 else (3 if x < 35 else (4 if x < 45 else 5))))
+df_rencontre["from"] = df_profil["from"].fillna("Non Renseigner").astype(str)
 df_rencontre["race"] = df_rencontre["race"]\
     .replace(1, "Black")\
     .replace(2,"European")\
@@ -130,24 +132,40 @@ df_rencontre["pid"] = df_rencontre["pid"].fillna(0).astype(int)
 def getUserMatchProfilDataframe(iid):
     matchesPid=df_rencontre.loc[df_rencontre["iid"]==iid]["pid"]
     return df_profil[df_profil["iid"].isin(matchesPid)]
+
 def getColumnMatchPourcente(column, value):
     columnRencontrePid = df_rencontre.loc[df_rencontre[column] == value]["pid"]
     columnMatchesPid = df_rencontre.loc[(df_rencontre["match"] == 1) & (df_rencontre[column] == value)]["pid"]
     
     columnMatchesPid = columnMatchesPid
     return (df_profil[df_profil["iid"].isin(columnMatchesPid)][column].value_counts())/(df_profil[df_profil["iid"].isin(columnRencontrePid)][column].value_counts())
-profil1 = 1
-profil2 = 400
-profil1Df = df_profil.loc[(df_profil["iid"] == profil1)]
-profil2Df = df_profil.loc[(df_profil["iid"] == profil2)]
 
-df_profil.loc[(df_profil["iid"] == profil1) | (df_profil["iid"] == profil2)]
+def getMatchPourcente(p1:pd.DataFrame,p2:pd.DataFrame):
+    _from = float(getColumnMatchPourcente("from", p1["from"].values[0]).fillna(0.5).get(p2["from"],0.5))
+    _career_c = float(getColumnMatchPourcente("career_c", p1["career_c"].values[0]).fillna(0.5).get(p2["career_c"],0.5))
+    _race = float(getColumnMatchPourcente("race", p1["race"].values[0]).fillna(0.5).get(p2["race"],0.5))
+    _gender = float(getColumnMatchPourcente("gender", p1["gender"].values[0]).fillna(0.5).get(p2["gender"],0.5))
+    _goal = float(getColumnMatchPourcente("goal", p1["goal"].values[0]).fillna(0.5).get(p2["goal"],0.5))
+    _field_cd = float(getColumnMatchPourcente("field_cd", p1["field_cd"].values[0]).fillna(0.5).get(p2["field_cd"],0.5))
+    _age = float(getColumnMatchPourcente("age", p1["age"].values[0]).fillna(0.5).get(p2["age"],0.5))
+    
+    return _from*_career_c*_race*_gender*_goal*_field_cd*_age*100
 
-getColumnMatchPourcente("from", profil1Df["from"].values[0])[profil2Df["from"]]*\
-getColumnMatchPourcente("career_c", profil1Df["career_c"].values[0])[profil2Df["career_c"]]*\
-getColumnMatchPourcente("race", profil1Df["race"].values[0])[profil2Df["race"]].values[0]*\
-getColumnMatchPourcente("gender", profil1Df["gender"].values[0])[profil2Df["gender"]].values[0]*\
-getColumnMatchPourcente("goal", profil1Df["goal"].values[0])[profil2Df["goal"]].values[0]*\
-getColumnMatchPourcente("field_cd", profil1Df["field_cd"].values[0])[profil2Df["field_cd"]].values[0]*\
-getColumnMatchPourcente("age", profil1Df["age"].values[0])[profil2Df["age"]].values[0]*100
-#if nan = 50% sur le champ concerné  
+def getRandomProfil():
+    def echantillonner_et_appliquer(colonne:pd.Series):
+        echantillon = colonne.sample(n=1).iloc[0]
+        return colonne.apply(lambda x: echantillon)
+
+    return df_profil.apply(echantillonner_et_appliquer).drop_duplicates()
+
+def getBestCompatibility(profil):
+    return pd.DataFrame({
+        "gender": getColumnMatchPourcente("gender", profil["gender"].values[0]).idxmax(),
+        "age": getColumnMatchPourcente("age", profil["age"].values[0]).idxmax(),
+        "field_cd": getColumnMatchPourcente("field_cd", profil["field_cd"].values[0]).idxmax(),
+        "race": getColumnMatchPourcente("race", profil["race"].values[0]).idxmax(),
+        "goal": getColumnMatchPourcente("goal", profil["goal"].values[0]).idxmax(),
+        "from": getColumnMatchPourcente("from", profil["from"].values[0]).idxmax(),
+        "career_c": getColumnMatchPourcente("career_c", profil["career_c"].values[0]).idxmax()
+    }, index=[0])
+
