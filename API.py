@@ -41,7 +41,7 @@ def get_participants():
         return data_treat.getMatchPourcente(df, row)
     dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
 
-    return dfs.to_json()
+    return dfs.to_json(orient="records")
 
 @app.route('/profiles/best', methods=['GET'])
 def get_participant(iid):
