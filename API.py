@@ -5,25 +5,26 @@ import data
 
 app = Flask(__name__)
 
+data_treat = data.DataTreatment("Speed_Dating_Data.csv")
+
 @app.route('/')
 def home():
     return "Welcome to the Speed Dating API!"
 
 @app.route('/profiles', methods=['GET'])
 def get_participants():
-    args=request.args
+    args=request.args.to_dict(flat=False)
+
+    print(args)
+
     df = pd.DataFrame(args)
-    dfs = pd.DataFrame([data.getRandomProfil() for _ in range(10)])
-    def calculate_pourcent(row):
-        return data.getMatchPourcente(df, row)
+    dfs = pd.DataFrame([data_treat.getRandomProfil() for _ in range(10)])
+    def calculate_pourcent(row):   
+        return data_treat.getMatchPourcente(df, row)
     dfs['pourcent'] = dfs.apply(calculate_pourcent, axis=1)
 
 @app.route('/profiles/best', methods=['GET'])
 def get_participant(iid):
-    # Filtering the dataset for a specific participant
-    participant = data.df[data.df['iid'] == iid][['iid', 'gender', 'age', 'field', 'race']].drop_duplicates()
-    if not participant.empty:
-        return jsonify(participant.to_dict(orient='records')[0])
-    else:
-        return jsonify({"error": "Participant not found"}), 404
+    pass
 
+app.run(host="0.0.0.0", port=8080,debug=True)
