@@ -43,8 +43,20 @@ def get_participants():
     return dfs.to_json(orient="records")
 
 @app.route('/profiles/best', methods=['GET'])
-def get_participant(iid):
-    pass
+def rerz():
+    args=request.args.to_dict(flat=False)
+
+    args = {
+        "gender":args.get("gender")[0],
+        "age":int(args.get("age")[0]),
+        "field_cd":args.get("field_cd")[0],
+        "race":args.get("race")[0],
+        "goal":args.get("goal")[0],
+        "from":args.get("from")[0],
+        "career_c":args.get("career_c")[0]
+    }
+    df = pd.DataFrame(args, index=[0])
+    return data_treat.getBestCompatibility(df).to_json()
 
 
 if __name__ == "__main__":
