@@ -3,7 +3,6 @@ import pandas as pd
 import data
 from pprint import pprint
 
-
 app = Flask(__name__)
 
 data_treat = data.DataTreatment("Speed_Dating_Data.csv")
@@ -47,4 +46,9 @@ def get_participants():
 def get_participant(iid):
     pass
 
-app.run(host="0.0.0.0", port=8080,debug=True)
+
+if __name__ == "__main__":
+    host = '0.0.0.0'
+    port = 5000
+
+    app.run(host, port, debug=True)
