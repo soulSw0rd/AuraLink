@@ -29,10 +29,10 @@ C'est profil et probabilité sont basées sur un dataset extrait des résultats 
 Le serveur est une API réalisée en Python à l'aide du module Flask.
 Il permettra à l'utilisateur de ce connecter et de recevoir les données formater à l'aide du module Pandas et à adapter à l'utilisation de l'application et ce sans avoir à toucher aux dataset d'origine.
 
-[Installation et utilisation](./Serveur/README.md)
+[Installation et utilisation](./Serveur/)
 
 ### Client
 
 Le client est une application mobile Android réalisée avec React Native qui communique qvec l'API du serveur afin de recevoir différents profils généré aléatoirement et permettre la personalisation du profil utilisateur ainsi que la boucle de jeu.
 
-[Installation et utilisation](./Client/README.md)
+[Installation et utilisation](./Client/)
