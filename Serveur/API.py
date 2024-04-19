@@ -1,6 +1,6 @@
 from flask import Flask, jsonify, request
 import pandas as pd
-import data
+import AuraLink.Serveur.data as data
 from pprint import pprint
 
 app = Flask(__name__)
