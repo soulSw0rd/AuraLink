@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 class DataTreatment:
     def __init__(self, file):
         self.file = file
@@ -145,7 +144,8 @@ class DataTreatment:
         columnMatchesPid = self.df_rencontre.loc[(self.df_rencontre["match"] == 1) & (self.df_rencontre[column] == value)]["pid"]
         
         columnMatchesPid = columnMatchesPid
-        return (self.df_profil[self.df_profil["iid"].isin(columnMatchesPid)][column].value_counts())/(self.df_profil[self.df_profil["iid"].isin(columnRencontrePid)][column].value_counts())
+        res = (self.df_profil[self.df_profil["iid"].isin(columnMatchesPid)][column].value_counts())/(self.df_profil[self.df_profil["iid"].isin(columnRencontrePid)][column].value_counts())
+        return  pd.Series({"Non renseigner":0}) if res.empty else res
 
     def getMatchPourcente(self, p1:pd.DataFrame,p2:pd.DataFrame):
         _from = float(self.getColumnMatchPourcente("from", p1["from"].values[0]).fillna(0.5).get(p2["from"],0.5))

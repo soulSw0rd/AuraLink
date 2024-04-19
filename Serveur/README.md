@@ -1,18 +1,18 @@
 # Serveur | AuraLink
 
 ## 📌 Sommaire
-1. [Installation](#💻-projet)
-    * [Prérequis](#présentation)
-2. [Configuration]()
-    * [Configuration des Ports]()
-3. [Utilisation]()
-    * [Lancement de l'API]()
-    * [Compréhension des Fonctions]()
+1. [Installation](#💻-installation)
+    * [Prérequis](#prérequis)
+2. [Configuration](#configuration)
+    * [Configuration des Ports](#configuration-des-ports)
+3. [Utilisation](#utilisation)
+    * [Lancement de l'API](#lancement-de-lapi)
+    * [Compréhension des Fonctions](#compréhension-des-fonctions)
 
 ## 🎯 Badges
-[![Python](https://img.shields.io/badge/Langage-Python3.12-blue.svg)](https://www.syscom-prorep.com/application-technologie/ble)
-[![Pandas - Python](https://img.shields.io/badge/Donnée-Pandas-red.svg)](https://visualstudio.microsoft.com/fr/xamarin/)
-[![Flask - Python](https://img.shields.io/badge/API-Flask-red.svg)](https://learn.microsoft.com/fr-fr/dotnet/csharp/)
+[![Python](https://img.shields.io/badge/Langage-Python3.12-blue.svg)](https://www.python.org)
+[![Pandas - Python](https://img.shields.io/badge/Donnée-Pandas-red.svg)](https://pandas.pydata.org/docs/getting_started/index.html)
+[![Flask - Python](https://img.shields.io/badge/API-Flask-red.svg)](https://flask.palletsprojects.com/en/3.0.x/)
 
 
 ## 💻 Installation
@@ -21,7 +21,7 @@
 
 * Installation de Python 3.12
 
-    [Liens de téléchargement]()
+    [Liens de téléchargement](https://www.python.org)
 
 * Installation du module Flask *(nécessaire pour le fonctionnement de l'API)*
 
@@ -35,7 +35,7 @@
 
 ### Configuration des ports
 
-* Dans le fichier [serveur.conf]() remplacez le port actuel ( à l'origine ```5000``` ) par le port sur lequel vous souhaitez que votre API reçoive les requêtes.
+* Dans le fichier [serveur.conf](./config/serveur.conf) remplacez le port actuel ( à l'origine ```5000``` ) par le port sur lequel vous souhaitez que votre API reçoive les requêtes.
 * Configurez votre parfeu de manière à ce qu'il accepte les entrées et sorties sur ce port.
 
 ## Utilisation
