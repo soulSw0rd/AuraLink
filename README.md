@@ -17,8 +17,7 @@
 
 ### Présentation
 
-AuraLink est une application Android permettant à l'utilisateur de deviner la probabilité que celui-ci à de match avec un profil généré aléatoirement qui lui sera présenté.
-C'est profil et probabilité sont basées sur un dataset extrait des résultats d'un speed dating. 
+AuraLink est une application Android permettant à l'utilisateur d'estimer la probabilité que celui-ci a de correspondre avec un profil généré aléatoirement. Ces profils et probabilités sont basés sur un data set extrait des résultats d'un speed dating.
 
 [Liens de téléchargement](https://data.world/annavmontoya/speed-dating-experiment)
 
